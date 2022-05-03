@@ -1,0 +1,8 @@
+.swp
+.DS_STORE
+.env
+node_modules
+build
+dist
+tags
+tags.*
