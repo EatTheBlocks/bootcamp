@@ -16,5 +16,8 @@
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.6",
     "hardhat": "^2.9.6"
+  },
+  "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.15"
   }
 }
