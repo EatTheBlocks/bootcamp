@@ -19,7 +19,7 @@ contract DAO {
 		address payable recipient;
 		uint votes;
 		uint end;
-		bool exeuted;
+		bool executed;
 	}
 
 	mapping (address=>bool) public investors;
@@ -40,9 +40,19 @@ contract DAO {
 		require(investors[msg.sender]==true,"Only investors can perform this activity");
 		_;
 	}
+
+	 modifier onlyAdmin(){
+		require(msg.sender==admin,"Only admin can perform this activity");
+		_;
+	}
 		
-    constructor (uint contributionTime) {
-        contributionEnd = block.timestamp + contributionTime;
+    constructor (uint contributionTime,  uint _voteTime,
+    uint _quorum) {
+	require(_quorum > 0 && _quorum < 100, 'quorum must be between 0 and 100');
+    contributionEnd = block.timestamp + contributionTime;
+	voteTime = _voteTime;
+    quorum = _quorum;
+    admin = msg.sender;
     }
 
     function contribute () payable external {
@@ -95,6 +105,28 @@ contract DAO {
 		require(block.timestamp< proposal.end, "Voting period has ended");
 		proposal.votes+= shares[msg.sender];
 		votes[msg.sender][proposalId]=true;
+	}
+
+	function executeProposal(uint proposalId) external onlyAdmin(){
+		Proposal storage proposal  = proposals[proposalId];
+		require(block.timestamp< proposal.end, "Execution period has ended");
+		require(proposal.executed==false, "Proposal already executed");
+		require((proposal.votes /totalShares)*100 >=quorum,"Not enough votes to execute the proposal");
+		_transferEther(proposal.amount,proposal.recipient);
+	}
+
+	function withdraw (uint amount, address payable to) external{
+		_transferEther(amount,to);
+	}
+
+	function _transferEther(uint amount, address payable to) internal  onlyAdmin(){
+		require(amount<=availableFunds,"Not enough funds");
+		to.transfer(amount);
+		availableFunds -=amount;
+	}
+
+	fallback() payable external {
+		availableFunds +=msg.value;
 	}
 
 }
