@@ -8,7 +8,7 @@ The frontend is built using `create-react-app`
 To start the frontend run
 
 ```
-npm start
+npm install && npm start
 ```
 
 ### 2. Start a [local node](https://hardhat.org/getting-started/#connecting-a-wallet-or-dapp-to-hardhat-network)
