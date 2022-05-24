@@ -1,42 +1,44 @@
 const hre = require("hardhat");
 
 async function main() {
-    const [deployer] = await hre.ethers.getSigners();
+  const CONTRIBUTION_END_TIME = 500;
+  const QUORUM = 60;
+  const VOTE_TIME = 500;
+  const [deployer] = await hre.ethers.getSigners();
 
-    const SampleContract = await hre.ethers.getContractFactory("SampleContract");
-    const sampleContract = await SampleContract.deploy();
+  const DAO = await hre.ethers.getContractFactory("DAO");
+  const dao = await DAO.deploy(CONTRIBUTION_END_TIME, VOTE_TIME, QUORUM);
 
-    await sampleContract.deployed();
-    console.log("Sample Contract address:", sampleContract.address);
+  await dao.deployed();
+  console.log("Contract address:", dao.address);
 
-    saveFrontendFiles(sampleContract);
-
+  saveFrontendFiles(dao);
 }
 
 function saveFrontendFiles(contract) {
-    const fs = require("fs");
-    const contractsDir = __dirname + "/../src/abis";
+  const fs = require("fs");
+  const contractsDir = __dirname + "/../src/abis";
 
-    if (!fs.existsSync(contractsDir)) {
-        fs.mkdirSync(contractsDir);
-    }
+  if (!fs.existsSync(contractsDir)) {
+    fs.mkdirSync(contractsDir);
+  }
 
-    fs.writeFileSync(
-        contractsDir + "/contract-address.json",
-        JSON.stringify({ SampleContract: contract.address }, undefined, 2)
-    );
+  fs.writeFileSync(
+    contractsDir + "/contract-address.json",
+    JSON.stringify({ DAO: contract.address }, undefined, 2)
+  );
 
-    const SampleContractArtifact = artifacts.readArtifactSync("SampleContract");
+  const DAOArtifact = hre.artifacts.readArtifactSync("DAO");
 
-    fs.writeFileSync(
-        contractsDir + "/SampleContract.json",
-        JSON.stringify(SampleContractArtifact, null, 2)
-    );
+  fs.writeFileSync(
+    contractsDir + "/DAO.json",
+    JSON.stringify(DAOArtifact, null, 2)
+  );
 }
 
 main()
-    .then(() => process.exit(0))
-    .catch(error => {
-        console.log(error);
-        process.exit(1);
-    });
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
