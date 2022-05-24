@@ -131,7 +131,7 @@ contract DAO {
 
 	function getProposals() public view returns (Proposal[] memory)  {
 		Proposal[] memory ret = new Proposal[](nextProposalId);
-		for (uint i = 0; i <=nextProposalId; i++) {
+		for (uint i = 0; i <nextProposalId; i++) {
 			ret[i] = proposals[i];
 		}
 		return ret;

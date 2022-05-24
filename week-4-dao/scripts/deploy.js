@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const CONTRIBUTION_END_TIME = 500;
+  const CONTRIBUTION_END_TIME = 2000;
   const QUORUM = 60;
   const VOTE_TIME = 500;
   const [deployer] = await hre.ethers.getSigners();
