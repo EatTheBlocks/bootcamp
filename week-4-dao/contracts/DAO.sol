@@ -116,7 +116,6 @@ contract DAO {
 	}
 
 	function withdraw (uint amount, address payable to) external{
-		availableFunds -=amount;
 		_transferEther(amount,to);
 	}
 

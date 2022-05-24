@@ -316,20 +316,20 @@ describe("DAO Contract", () => {
       expect(await recipient.getBalance()).to.be.eql(expectedBalance);
     });
 
-    it("Should not allow non admin execute proposal", async () => {
-      let proposal = await DAOContract.proposals(0);
-      await expect(
-        DAOContract.connect(investor).executeProposal(proposal.id)
-      ).to.be.revertedWith("Only admin can perform this activity");
-    });
-
-    it("Should not allow to execute proposal with sufficient votes ", async () => {
+    it("Should not allow to execute proposal with insufficient votes ", async () => {
       let proposal = await DAOContract.proposals(0);
       let expectedBalance = (await recipient.getBalance()).add(proposal.amount);
       await DAOContract.connect(investor).vote(proposal.id);
       await expect(
         DAOContract.connect(admin).executeProposal(proposal.id)
       ).to.be.revertedWith("Not enough votes to execute the proposal");
+    });
+
+    it("Should not allow non admin execute proposal", async () => {
+      let proposal = await DAOContract.proposals(0);
+      await expect(
+        DAOContract.connect(investor).executeProposal(proposal.id)
+      ).to.be.revertedWith("Only admin can perform this activity");
     });
   });
 

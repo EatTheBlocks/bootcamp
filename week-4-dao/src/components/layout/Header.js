@@ -9,16 +9,20 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 const Header = () => {
-  const [shares, setShares] = useState(0);
+  const [shares, setShares] = useState("0");
   const [contributionEnd, setContributionEnd] = useState(0);
+  const [availableFunds, setAvailableFunds] = useState("0");
   const { data: account } = useAccount();
   const currentTimestamp = +new Date() / 1000;
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const getShares = async () => {
     try {
       account &&
-        setShares((await DAOContract().shares(account.address)).toNumber());
+        setShares((await DAOContract().shares(account.address)).toString());
       setContributionEnd((await DAOContract().contributionEnd()).toNumber());
+      setAvailableFunds((await DAOContract().availableFunds()).toString());
+      account && setIsAdmin((await DAOContract().admin()) == account.address);
     } catch (error) {
       showError(error);
     }
@@ -35,13 +39,14 @@ const Header = () => {
           Contribution to this DAO is ends on:{" "}
           <b> {new Date(contributionEnd * 1000).toString()}</b>
         </p>
+        <p>Total Available Funds : {availableFunds}</p>
         <hr />
         <p className="mb-0">
           <div className="d-flex justify-content-end m-4">
             {currentTimestamp < contributionEnd && <Contribute />}
             <Transfer />
             <Redeem />
-            <Withdraw />
+            {isAdmin && <Withdraw />}
             <AddNewProposal />
           </div>
         </p>
