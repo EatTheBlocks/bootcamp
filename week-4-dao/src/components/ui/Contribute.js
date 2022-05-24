@@ -37,7 +37,7 @@ const Contribute = () => {
         <Modal.Body>
           <form onSubmit={handleSubmit}>
             <Form.Group className="mb-2" controlId="amount">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Amount</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter amount"
