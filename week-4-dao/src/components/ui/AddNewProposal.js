@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { HiDocumentAdd } from "react-icons/hi";
-import { DAOContract, showError } from "../../utils/common";
+import { getBlockchain, showError } from "../../utils/common";
 
 const AddNewProposal = () => {
   const [show, setShow] = useState(false);
@@ -17,8 +17,9 @@ const AddNewProposal = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { DAOContract } = await getBlockchain();
     try {
-      await DAOContract().createProposal(name, amount, recipient);
+      await DAOContract.createProposal(name, amount, recipient);
     } catch (error) {
       showError(error);
     }

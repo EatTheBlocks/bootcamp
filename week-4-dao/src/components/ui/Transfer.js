@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { HiRefresh } from "react-icons/hi";
-import { DAOContract, showError } from "../../utils/common";
+import { getBlockchain, showError } from "../../utils/common";
 const Transfer = () => {
   const [show, setShow] = useState(false);
 
@@ -18,8 +18,9 @@ const Transfer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { DAOContract, signerAddress } = await getBlockchain();
     try {
-      await DAOContract().transfer(amount, recipient);
+      await DAOContract.transfer(amount, recipient);
     } catch (error) {
       showError(error);
     }

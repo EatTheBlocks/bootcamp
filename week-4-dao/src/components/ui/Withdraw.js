@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { HiCollection } from "react-icons/hi";
-import { DAOContract, showError } from "../../utils/common";
+import { getBlockchain, showError } from "../../utils/common";
 const Withdraw = () => {
   const [show, setShow] = useState(false);
 
@@ -17,9 +17,10 @@ const Withdraw = () => {
   };
 
   const handleSubmit = async (e) => {
+    const { DAOContract, signerAddress } = await getBlockchain();
     e.preventDefault();
     try {
-      await DAOContract().withdraw(amount, recipient);
+      await DAOContract.withdraw(amount, recipient);
     } catch (error) {
       showError(error);
     }

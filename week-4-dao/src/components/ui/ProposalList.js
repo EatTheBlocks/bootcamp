@@ -3,34 +3,36 @@ import Button from "react-bootstrap/Button";
 import { FcApproval } from "react-icons/fc";
 import { ImLibrary, ImQuill } from "react-icons/im";
 import { useEffect, useState } from "react";
-import { DAOContract, showError } from "../../utils/common";
-import { useAccount } from "wagmi";
+import { getBlockchain, showError } from "../../utils/common";
 
 const ProposalList = () => {
   const [proposals, setProposals] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const { data: account } = useAccount();
 
   const getProposals = async () => {
+    const { DAOContract, signerAddress } = await getBlockchain();
+
     try {
-      setProposals(await DAOContract().getProposals());
-      account && setIsAdmin((await DAOContract().admin()) == account.address);
+      setProposals(await DAOContract.getProposals());
+      signerAddress && setIsAdmin((await DAOContract.admin()) == signerAddress);
     } catch (error) {
       showError(error);
     }
   };
 
   const vote = async (id) => {
+    const { DAOContract, signerAddress } = await getBlockchain();
     try {
-      await DAOContract().vote(id);
+      await DAOContract.vote(id);
     } catch (error) {
       showError(error);
     }
   };
 
   const execute = async (id) => {
+    const { DAOContract, signerAddress } = await getBlockchain();
     try {
-      await DAOContract().executeProposal(id);
+      await DAOContract.executeProposal(id);
     } catch (error) {
       showError(error);
     }
@@ -38,7 +40,7 @@ const ProposalList = () => {
 
   useEffect(() => {
     getProposals();
-  }, [account]);
+  }, []);
 
   return (
     <div>
@@ -59,7 +61,7 @@ const ProposalList = () => {
         </thead>
         <tbody>
           {proposals.map((proposal) => (
-            <tr>
+            <tr key={proposal.id.toString()}>
               <td>{proposal.id.toNumber()}</td>
               <td>{proposal.name}</td>
               <td>{proposal.amount.toString()}</td>

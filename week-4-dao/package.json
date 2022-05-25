@@ -1,5 +1,5 @@
 {
-  "name": "bootcamp",
+  "name": "etb-dao",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,7 +14,6 @@
     "react-router-dom": "^5.2.1",
     "react-scripts": "5.0.1",
     "sweetalert2": "^11.4.16",
-    "wagmi": "^0.4.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

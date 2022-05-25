@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { HiChevronDoubleDown } from "react-icons/hi";
-import { DAOContract, showError } from "../../utils/common";
+import { getBlockchain, showError } from "../../utils/common";
 const Redeem = () => {
   const [show, setShow] = useState(false);
 
@@ -16,9 +16,10 @@ const Redeem = () => {
   };
 
   const handleSubmit = async (e) => {
+    const { DAOContract, signerAddress } = await getBlockchain();
     e.preventDefault();
     try {
-      await DAOContract().redeem(amount);
+      await DAOContract.redeem(amount);
     } catch (error) {
       showError(error);
     }

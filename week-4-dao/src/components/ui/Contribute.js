@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { HiCurrencyDollar } from "react-icons/hi";
-import { DAOContract, showError } from "../../utils/common";
+import { getBlockchain, showError } from "../../utils/common";
 
 const Contribute = () => {
   const [show, setShow] = useState(false);
@@ -18,8 +18,11 @@ const Contribute = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("heello");
+    const { DAOContract } = await getBlockchain();
+    console.log(DAOContract);
     try {
-      await DAOContract().contribute({ value: amount });
+      await DAOContract.contribute({ value: amount });
     } catch (error) {
       showError(error);
     }
