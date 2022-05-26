@@ -65,11 +65,12 @@ contract DAO {
     }
 
     function redeem (uint amount) external{
-         require( shares[msg.sender] >=amount, 'Insufficient shares available');
-         require( shares[msg.sender] >=availableFunds, 'Insufficient shares available for transfer');
-		 shares[msg.sender] -= amount;
+        require( shares[msg.sender] >=amount, 'Insufficient shares available');
+        require( availableFunds >= amount, 'Insufficient shares available for transfer');
+		shares[msg.sender] -= amount;
         totalShares -= amount;
         availableFunds -= amount;
+		payable(msg.sender).transfer(amount);
     }
  
 
@@ -125,9 +126,11 @@ contract DAO {
 		availableFunds -=amount;
 	}
 
-	fallback() payable external {
-		availableFunds +=msg.value;
+	 //For ether returns of proposal investments
+	receive() external payable {
+		availableFunds += msg.value;
 	}
+
 
 	function getProposals() public view returns (Proposal[] memory)  {
 		Proposal[] memory ret = new Proposal[](nextProposalId);

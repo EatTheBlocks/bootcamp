@@ -59,7 +59,7 @@ const Transfer = () => {
               />
             </Form.Group>
             <Button variant="primary" type="submit" className="mt-2">
-              Contribute
+              Transfer
             </Button>
           </form>
         </Modal.Body>

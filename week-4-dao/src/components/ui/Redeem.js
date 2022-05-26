@@ -16,8 +16,8 @@ const Redeem = () => {
   };
 
   const handleSubmit = async (e) => {
-    const { DAOContract, signerAddress } = await getBlockchain();
     e.preventDefault();
+    const { DAOContract, signerAddress } = await getBlockchain();
     try {
       await DAOContract.redeem(amount);
     } catch (error) {

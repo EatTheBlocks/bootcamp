@@ -17,8 +17,8 @@ const Withdraw = () => {
   };
 
   const handleSubmit = async (e) => {
-    const { DAOContract, signerAddress } = await getBlockchain();
     e.preventDefault();
+    const { DAOContract, signerAddress } = await getBlockchain();
     try {
       await DAOContract.withdraw(amount, recipient);
     } catch (error) {
