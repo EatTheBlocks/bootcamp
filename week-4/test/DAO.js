@@ -12,14 +12,14 @@ describe("DAO Contract", () => {
   let RECIPIENT_ADDRESS;
   let investor, recipient;
 
-  //   Deploy the contract
+  //Deploy the contract
   beforeEach(async () => {
     DAO = await ethers.getContractFactory("DAO");
     [admin, investor, investor2, recipient] = await ethers.getSigners();
     DAOContract = await DAO.deploy(CONTRIBUTION_END_TIME, VOTE_TIME, QUORUM);
   });
 
-  // Contribution
+  //Contribution
   describe("Valid Contribution", () => {
     beforeEach(async () => {
       await DAOContract.connect(investor).contribute({
@@ -51,13 +51,9 @@ describe("DAO Contract", () => {
   });
 
   describe("Contribution Expiry", () => {
-    beforeEach(async () => {
-      // Forward the EVM timestamp by CONTRIBUTION_END_TIME
+    it("Should not accept any contributions after contribution period ends", async () => {
       await ethers.provider.send("evm_increaseTime", [CONTRIBUTION_END_TIME]);
       await ethers.provider.send("evm_mine");
-    });
-
-    it("Should not accept any contributions after contribution period ends", async () => {
       await expect(
         DAOContract.connect(investor).contribute({ value: 1000 })
       ).to.be.revertedWith("Sorry contribution period to this DAO has ended");
@@ -67,9 +63,9 @@ describe("DAO Contract", () => {
     });
   });
 
-  // Redeem
+  //Redeem
   describe("Redeem Shares", () => {
-    // Contribute
+    //Contribute
     beforeEach(async () => {
       await DAOContract.connect(investor).contribute({
         value: CONTRIBUTED_AMOUNT,
@@ -86,7 +82,7 @@ describe("DAO Contract", () => {
         .not.be.reverted;
     });
 
-    it("Should not allow to redeem more than contribution amount", async () => {
+    it("Should NOT allow to redeem more than contribution amount", async () => {
       await expect(
         DAOContract.connect(investor).redeem(CONTRIBUTED_AMOUNT + 1)
       ).to.be.revertedWith("Insufficient shares available");
@@ -119,9 +115,9 @@ describe("DAO Contract", () => {
     });
   });
 
-  // Transfer
+  //Transfer
   describe("Transfer Shares", () => {
-    // Contribute
+    //Contribute
     beforeEach(async () => {
       await DAOContract.connect(investor).contribute({
         value: CONTRIBUTED_AMOUNT,
@@ -191,9 +187,9 @@ describe("DAO Contract", () => {
     });
   });
 
-  // Proposal
+  //Proposal
   describe("Proposal", () => {
-    // Contribute
+    //Contribute
     beforeEach(async () => {
       RECIPIENT_ADDRESS = recipient.address;
       await DAOContract.connect(investor).contribute({
@@ -237,13 +233,13 @@ describe("DAO Contract", () => {
 
   describe("Vote", () => {
     beforeEach(async () => {
-      // Contribute
+      //Contribute
       RECIPIENT_ADDRESS = recipient.address;
       await DAOContract.connect(investor).contribute({
         value: CONTRIBUTED_AMOUNT,
       });
 
-      //   Create proposal
+      //Create proposal
       await DAOContract.connect(investor).createProposal(
         PROPOSAL_NAME,
         PROPOSAL_AMOUNT,
@@ -251,7 +247,7 @@ describe("DAO Contract", () => {
       );
     });
 
-    it("Should allow to investors to vote", async () => {
+    it("Should allow investors to vote", async () => {
       let proposal = await DAOContract.proposals(0);
       await DAOContract.connect(investor).vote(proposal.id);
       proposal = await DAOContract.proposals(0);
@@ -259,14 +255,14 @@ describe("DAO Contract", () => {
       await expect(proposal.votes).to.be.equal(CONTRIBUTED_AMOUNT);
     });
 
-    it("Should allow not non investors to vote", async () => {
+    it("Should NOT allow non investors to vote", async () => {
       let proposal = await DAOContract.proposals(0);
       await expect(
         DAOContract.connect(recipient).vote(proposal.id)
       ).to.be.revertedWith("Only investors can perform this activity");
     });
 
-    it("Should allow not investor to vote more than once on same proposal", async () => {
+    it("Should NOT allow investor to vote more than once on same proposal", async () => {
       let proposal = await DAOContract.proposals(0);
       await DAOContract.connect(investor).vote(proposal.id);
       await expect(
@@ -274,7 +270,7 @@ describe("DAO Contract", () => {
       ).to.be.revertedWith("Already voted for this proposal");
     });
 
-    it("Should allow not investor to vote after voting period has ended", async () => {
+    it("Should NOT allow investor to vote after voting period has ended", async () => {
       let proposal = await DAOContract.proposals(0);
       await ethers.provider.send("evm_increaseTime", [VOTE_TIME]);
       await ethers.provider.send("evm_mine");
@@ -284,22 +280,22 @@ describe("DAO Contract", () => {
     });
   });
 
-  //   Execute
+  //Execute
   describe("Execute", () => {
     beforeEach(async () => {
-      // Contribute Investor 1
+      //Contribute Investor 1
       RECIPIENT_ADDRESS = recipient.address;
       await DAOContract.connect(investor).contribute({
         value: CONTRIBUTED_AMOUNT,
       });
 
-      // Contribute Investor 2
+      //Contribute Investor 2
       RECIPIENT_ADDRESS = recipient.address;
       await DAOContract.connect(investor2).contribute({
         value: CONTRIBUTED_AMOUNT,
       });
 
-      //   Create proposal
+      //Create proposal
       await DAOContract.connect(investor).createProposal(
         PROPOSAL_NAME,
         PROPOSAL_AMOUNT,
@@ -316,7 +312,7 @@ describe("DAO Contract", () => {
       expect(await recipient.getBalance()).to.be.eql(expectedBalance);
     });
 
-    it("Should not allow to execute proposal with insufficient votes ", async () => {
+    it("Should NOT allow to execute proposal with insufficient votes", async () => {
       let proposal = await DAOContract.proposals(0);
       let expectedBalance = (await recipient.getBalance()).add(proposal.amount);
       await DAOContract.connect(investor).vote(proposal.id);
@@ -325,7 +321,7 @@ describe("DAO Contract", () => {
       ).to.be.revertedWith("Not enough votes to execute the proposal");
     });
 
-    it("Should not allow non admin execute proposal", async () => {
+    it("Should NOT allow non admin execute proposal", async () => {
       let proposal = await DAOContract.proposals(0);
       await expect(
         DAOContract.connect(investor).executeProposal(proposal.id)
@@ -333,10 +329,10 @@ describe("DAO Contract", () => {
     });
   });
 
-  //   Withdraw
+  //Withdraw
   describe("Withdraw", () => {
     beforeEach(async () => {
-      // Contribute Investor 1
+      //Contribute Investor 1
       RECIPIENT_ADDRESS = recipient.address;
       await DAOContract.connect(investor).contribute({
         value: CONTRIBUTED_AMOUNT,
@@ -354,7 +350,7 @@ describe("DAO Contract", () => {
       expect(await recipient.getBalance()).to.be.eql(expectedBalance);
     });
 
-    it("Should not allow to withdraw more than available funds", async () => {
+    it("Should NOT allow to withdraw more than available funds", async () => {
       await expect(
         DAOContract.connect(admin).withdraw(
           CONTRIBUTED_AMOUNT + 100,
@@ -363,7 +359,7 @@ describe("DAO Contract", () => {
       ).to.be.revertedWith("Not enough funds");
     });
 
-    it("Should not allow non admin to withdraw funds", async () => {
+    it("Should NOT allow non admin to withdraw funds", async () => {
       await expect(
         DAOContract.connect(investor).withdraw(
           CONTRIBUTED_AMOUNT + 100,

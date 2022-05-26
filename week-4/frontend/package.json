@@ -14,7 +14,8 @@
     "react-router-dom": "^5.2.1",
     "react-scripts": "5.0.1",
     "sweetalert2": "^11.4.16",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "ethers": "^5.6.7"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,14 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.6",
-    "@nomiclabs/hardhat-waffle": "^2.0.3",
-    "chai": "^4.3.6",
-    "dotenv": "^10.0.0",
-    "ethereum-waffle": "^3.4.4",
-    "ethers": "^5.6.7",
-    "hardhat": "^2.9.5"
   }
 }
