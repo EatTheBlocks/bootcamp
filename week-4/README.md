@@ -8,12 +8,18 @@ The frontend is built using `create-react-app`
 To start the frontend run
 
 ```
-npm install && npm start
+cd frontend
+npm install
+npm start
 ```
+
 
 ### 2. Start a [local node](https://hardhat.org/getting-started/#connecting-a-wallet-or-dapp-to-hardhat-network)
 
+Hardhat is a blockchain development toolkit used to compile your solidity files, run tests and run a local blockchain node.
+
 ```
+	npm install
 	npx hardhat node
 ```
 
