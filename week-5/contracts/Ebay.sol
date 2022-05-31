@@ -102,6 +102,9 @@ contract Ebay {
             offerIds
         );
 
+        // Save the auction to user auction mapping
+        userAuctions[msg.sender].push(nextAuctionId);
+
         // Increment the auction counter
         nextAuctionId++;
     }
@@ -141,6 +144,9 @@ contract Ebay {
         );
 
         auction.offerIds.push(nextOfferId);
+
+        // Save the auction to user offer mapping
+        userOffers[msg.sender].push(nextOfferId);
 
         // Increment the offer counter
         nextOfferId++;
