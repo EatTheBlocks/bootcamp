@@ -22,7 +22,7 @@ async function main() {
 
   //   await greeter.deployed();
 
-  console.log("Greeter deployed to:", contract.address);
+  console.log("Contract deployed to:", contract.address);
 
   // Write contract address to artifact
   fs.writeFileSync(
