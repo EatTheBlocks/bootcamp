@@ -21,7 +21,10 @@ function App() {
       <Header blockchain={blockchain} />
       <Routes>
         <Route path="/" element={<AuctionList blockchain={blockchain} />} />
-        <Route path="/auction/:id" element={<AuctionDetail />} />
+        <Route
+          path="/auction/:id"
+          element={<AuctionDetail blockchain={blockchain} />}
+        />
       </Routes>
     </div>
   );

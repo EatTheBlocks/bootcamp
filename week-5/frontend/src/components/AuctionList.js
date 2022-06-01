@@ -25,17 +25,32 @@ const AuctionList = ({ blockchain }) => {
           <Col md={12} className="mb-3" key={auction.id}>
             <Card>
               <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-                <Link to="/auction/1">
+                <Card.Title>{auction.name}</Card.Title>
+                <Card.Text>{auction.description}</Card.Text>
+                <Link
+                  to={`/auction/${auction.id}`}
+                  state={{
+                    auction: {
+                      ...auction,
+                      minimumOfferPrice: auction.minimumOfferPrice.toString(),
+                      auctionEnd: new Date(
+                        auction.auctionEnd * 1000
+                      ).toString(),
+                    },
+                  }}
+                >
                   <Button variant="primary">View</Button>
                 </Link>
               </Card.Body>
               <Card.Footer>
-                <small className="text-muted">Posted by:</small>
+                <small className="text-muted">
+                  Ends On:{" "}
+                  <b>{new Date(auction.auctionEnd * 1000).toString()}</b>
+                </small>
+                <br />
+                <small className="text-muted">
+                  Posted by: <b>{auction.seller}</b>
+                </small>
               </Card.Footer>
             </Card>
           </Col>
