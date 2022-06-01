@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import { address } from "./../artifacts/contracts/Ebay.sol/contract-address.json";
-import { abi } from "./../artifacts/contracts/Ebay.sol/Ebay.json";
+import ContractAddress from "./../artifacts/contracts/Ebay.sol/contract-address.json";
+import ContractAbi from "./../artifacts/contracts/Ebay.sol/Ebay.json";
 
 const getBlockchain = () =>
   new Promise((resolve, reject) => {
@@ -11,7 +11,11 @@ const getBlockchain = () =>
         const signer = provider.getSigner();
         const signerAddress = await signer.getAddress();
 
-        const ebay = new ethers.Contract(address, abi, signer);
+        const ebay = new ethers.Contract(
+          ContractAddress.address,
+          ContractAbi.abi,
+          signer
+        );
 
         resolve({ signerAddress, ebay });
       }

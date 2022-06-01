@@ -7,8 +7,8 @@ const Header = () => {
   return (
     <Navbar bg="primary" expand="lg" variant="dark">
       <Container>
-        <Link to="/">
-          <Navbar.Brand href="#">Ebay Dapp</Navbar.Brand>
+        <Link to="/" className="navbar-brand">
+          Ebay Dapp
         </Link>
         <Button variant="warning">+ Add New Auction</Button>
       </Container>

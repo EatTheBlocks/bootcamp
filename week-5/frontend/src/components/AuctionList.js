@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
-const AuctionList = () => {
+const AuctionList = ({ blockchain }) => {
   // State to store auctions
-  const [auctions, setAuctions] = useState([1, 3, 3, 3]);
+  const [auctions, setAuctions] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      blockchain.ebay && setAuctions(await blockchain.ebay.getAuctions());
+    })();
+  }, [blockchain]);
+
   return (
     <Container>
       <Row className="my-5">
@@ -15,7 +22,7 @@ const AuctionList = () => {
           <h3>All Auctions</h3>
         </Col>
         {auctions.map((auction) => (
-          <Col md={12} className="mb-3">
+          <Col md={12} className="mb-3" key={auction.id}>
             <Card>
               <Card.Body>
                 <Card.Title>Card Title</Card.Title>
