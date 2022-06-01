@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+import { useState } from "react";
+import Header from "./components/Header";
+import { Route, Routes } from "react-router-dom";
+import AuctionList from "./components/AuctionList";
 
 function App() {
+  // List of auctions
+  const [auctions, setAuctions] = useState([1, 2, 3, 4]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <Routes>
+        <Route path="/" element={<AuctionList />} />
+      </Routes>
     </div>
   );
 }
