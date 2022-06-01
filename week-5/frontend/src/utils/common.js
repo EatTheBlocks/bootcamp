@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import ContractAddress from "./../artifacts/contracts/Ebay.sol/contract-address.json";
 import ContractAbi from "./../artifacts/contracts/Ebay.sol/Ebay.json";
+import Swal from "sweetalert2";
 
 const getBlockchain = () =>
   new Promise((resolve, reject) => {
@@ -23,4 +24,13 @@ const getBlockchain = () =>
     });
   });
 
+function showError(error) {
+  Swal.fire({
+    icon: "error",
+    title: "Transaction Failed",
+    text: error.toString(),
+  });
+}
+
+export { getBlockchain, showError };
 export default getBlockchain;
