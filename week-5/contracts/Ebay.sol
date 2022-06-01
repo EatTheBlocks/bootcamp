@@ -224,4 +224,24 @@ contract Ebay {
         }
         return _offers;
     }
+
+    /// @notice - List of offers for an auction
+    /// @param _auctionId - Auction Id
+    function getAuctionOffers(uint _auctionId)
+        external
+        view
+        auctionExists(_auctionId)
+        returns (Offer[] memory)
+    {
+        // Retrieve the auction
+        Auction storage auction = auctions[_auctionId];
+        uint[] storage auctionOfferIds = auction.offerIds;
+
+        Offer[] memory _offers = new Offer[](auctionOfferIds.length);
+        for (uint i = 0; i < auctionOfferIds.length; i++) {
+            uint offerId = auctionOfferIds[i];
+            _offers[i] = offers[offerId];
+        }
+        return _offers;
+    }
 }

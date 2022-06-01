@@ -21,7 +21,7 @@ const Header = ({ blockchain }) => {
   const handleClose = () => {
     setShow(false);
   };
-  console.log(blockchain);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -91,6 +91,8 @@ const Header = ({ blockchain }) => {
                 type="number"
                 placeholder="Enter duration"
                 value={duration}
+                min="86400"
+                max="864000"
                 onChange={(e) => setDuration(e.target.value)}
                 required
               />

@@ -20,10 +20,27 @@ const AuctionDetail = ({ blockchain }) => {
   const location = useLocation();
 
   const { auction } = location.state;
-  const handleSubmit = async (e) => {
+
+  /**
+   * Create a new offer
+   * @param {*} e
+   */
+  const createOffer = async (e) => {
     e.preventDefault();
     try {
       await blockchain.ebay.createOffer(auction.id, { value: offer });
+      setOffer(0);
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  /**
+   * Perform auction trade
+   */
+  const trade = async () => {
+    try {
+      await blockchain.ebay.trade(auction.id);
       setOffer(0);
     } catch (error) {
       showError(error);
@@ -35,14 +52,12 @@ const AuctionDetail = ({ blockchain }) => {
     (async () => {
       try {
         blockchain.ebay &&
-          setOffers(
-            await blockchain.ebay.getUserOffers(blockchain.signerAddress)
-          );
+          setOffers(await blockchain.ebay.getAuctionOffers(auction.id));
       } catch (error) {
         showError(error);
       }
     })();
-  }, [blockchain]);
+  }, [blockchain, auction]);
 
   return (
     <Container className="py-2">
@@ -56,13 +71,17 @@ const AuctionDetail = ({ blockchain }) => {
         <Col md={12} className="mb-4">
           <Card>
             <Card.Body>
+              <Button variant="success float-end" onClick={trade}>
+                Trade Best Offer
+              </Button>
               <Card.Title>{auction.name}</Card.Title>
               <Card.Text>{auction.description}</Card.Text>
+
               <hr />
               <Form
                 className="form-inline"
                 style={{ maxWidth: "400px" }}
-                onSubmit={handleSubmit}
+                onSubmit={createOffer}
               >
                 <Row>
                   <Col>
@@ -109,7 +128,6 @@ const AuctionDetail = ({ blockchain }) => {
               <tr>
                 <th>Buyer</th>
                 <th>Amount</th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -117,9 +135,6 @@ const AuctionDetail = ({ blockchain }) => {
                 <tr>
                   <td>{offer.buyer}</td>
                   <td>{offer.offerPrice.toString()}</td>
-                  <td align="right" className="py-10">
-                    <Button>Trade</Button>
-                  </td>
                 </tr>
               ))}
             </tbody>
