@@ -20,8 +20,6 @@ async function main() {
   const Contract = await hre.ethers.getContractFactory(CONTRACT_NAME);
   const contract = await Contract.deploy();
 
-  //   await greeter.deployed();
-
   console.log("Contract deployed to:", contract.address);
 
   // Write contract address to artifact

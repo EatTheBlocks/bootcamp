@@ -1,9 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.14;
 
-/// ============ Imports ============
-import "hardhat/console.sol";
-
 /// @title Ebay
 /// @notice Smart contract for auction based market place.
 contract Ebay {
