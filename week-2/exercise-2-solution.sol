@@ -3,7 +3,7 @@ pragma solidity 0.8.13;
 contract Wallet {
   address public owner;
 
-  constructor(address owner) {
+  constructor(address _owner) {
     owner = _owner;
   }
 
